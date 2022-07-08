@@ -1,16 +1,20 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import "./App.css";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 import Create from "./pages/create/Create";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Login from "./pages/login/Login";
-import Project from "./pages/project/Project.";
+import Project from "./pages/project/Project";
 import Signup from "./pages/signup/Signup";
 
 function App() {
   return (
     <div className="App">
-      <div className="container">
-        <BrowserRouter>
+      <BrowserRouter>
+        <Sidebar />
+        <div className="container">
+          <Navbar />
           <Switch>
             <Route exact path="/">
               <Dashboard />
@@ -28,8 +32,8 @@ function App() {
               <Project />
             </Route>
           </Switch>
-        </BrowserRouter>
-      </div>
+        </div>
+      </BrowserRouter>
     </div>
   );
 }

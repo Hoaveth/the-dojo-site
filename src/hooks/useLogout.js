@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { projectAuth } from "../config/firebaseConfig";
+import { projectAuth, projectFirestore } from "../config/firebaseConfig";
 import { LOGOUT_ACTION } from "../utils/constants";
 import { useAuthContext } from "./useAuthContext";
 
@@ -7,13 +7,20 @@ export const useLogout = () => {
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [isCancelled, setIsCancelled] = useState(false);
-  const { dispatch } = useAuthContext();
+  const { dispatch, user } = useAuthContext();
 
   const logout = async () => {
     setError(null);
     setIsPending(true);
 
     try {
+      //change the online status
+      const { uid } = user;
+
+      await projectFirestore.collection("users").doc(uid).update({
+        online: false,
+      });
+
       //sign out the user
       const response = await projectAuth.signOut();
 

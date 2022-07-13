@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { projectAuth, projectStorage } from "../config/firebaseConfig";
+import {
+  projectAuth,
+  projectFirestore,
+  projectStorage,
+} from "../config/firebaseConfig";
 import { LOGIN_ACTION, SIGN_UP_ERROR } from "../utils/constants";
 import { useAuthContext } from "./useAuthContext";
 
@@ -30,6 +34,13 @@ export const useSignup = () => {
 
       //add display name to the user
       await response.user.updateProfile({ displayName, photoURL: imageURL });
+
+      //create a user document
+      await projectFirestore.collection("users").doc(response.user.uid).set({
+        online: true,
+        displayName,
+        photoURL: imageURL,
+      });
 
       //dispatch login action
       dispatch({ type: LOGIN_ACTION, payload: response.user });
